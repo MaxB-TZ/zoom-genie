@@ -1,5 +1,6 @@
 # zoom-genie
-A chat interface built on top of the Databricks Genie API
+
+A lightweight REST API server that provides a clean interface to interact with Databricks Genie API. Built with Deno.
 
 ## Setup
 
