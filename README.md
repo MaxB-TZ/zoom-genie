@@ -71,4 +71,5 @@ curl -X POST http://localhost:8000/api/genie/get-message \
 
 ## References
 
-- [Databricks Genie API Documentation](https://docs.databricks.com/api/workspace/genie/startconversation)
+- [Databricks Start Genie Conversation API Docs](https://docs.databricks.com/api/workspace/genie/startconversation)
+- [Databricks Get Conversation Message API Docs](https://docs.databricks.com/api/workspace/genie/getmessage)
