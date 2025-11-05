@@ -9,7 +9,6 @@ Create a `.env` file in the project root:
 ```env
 DATABRICKS_WORKSPACE_URL=https://your-workspace.cloud.databricks.com
 DATABRICKS_TOKEN=your-databricks-token
-DATABRICKS_SPACE_ID=your-space-id
 ```
 
 ## Start the Server
@@ -36,7 +35,7 @@ The server will start on `http://localhost:8000`
 ```json
 {
   "content": "Your question or message here",
-  "space_id": "optional-space-id-if-not-set-in-env"
+  "space_id": "your-space-id"
 }
 ```
 
@@ -44,7 +43,7 @@ The server will start on `http://localhost:8000`
 ```bash
 curl -X POST http://localhost:8000/api/genie/start-conversation \
   -H "Content-Type: application/json" \
-  -d '{"content": "What are the biggest open opportunities?"}'
+  -d '{"content": "What are the biggest open opportunities?", "space_id": "your-space-id"}'
 ```
 
 ### Get Message
@@ -56,7 +55,7 @@ curl -X POST http://localhost:8000/api/genie/start-conversation \
 {
   "conversation_id": "conversation-uuid",
   "message_id": "message-uuid",
-  "space_id": "optional-space-id-if-not-set-in-env"
+  "space_id": "your-space-id"
 }
 ```
 
@@ -66,7 +65,8 @@ curl -X POST http://localhost:8000/api/genie/get-message \
   -H "Content-Type: application/json" \
   -d '{
     "conversation_id": "e1ef34712a29169db030324fd0e1df5f",
-    "message_id": "e1ef34712a29169db030324fd0e1df5f"
+    "message_id": "e1ef34712a29169db030324fd0e1df5f",
+    "space_id": "your-space-id"
   }'
 ```
 

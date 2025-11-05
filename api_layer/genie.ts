@@ -3,13 +3,13 @@ import { getGenieMessage } from "./get_message.ts";
 
 interface StartConversationRequest {
   content: string;
-  space_id?: string;
+  space_id: string;
 }
 
 interface GetMessageRequest {
   conversation_id: string;
   message_id: string;
-  space_id?: string;
+  space_id: string;
 }
 
 function json(body: unknown, init: ResponseInit = {}) {
@@ -47,21 +47,13 @@ export function handler(req: Request): Promise<Response> | Response {
         return json({ error: "content field is required" }, { status: 400 });
       }
 
-      const spaceId = body.space_id || Deno.env.get("DATABRICKS_SPACE_ID");
-
-      if (!spaceId) {
-        return json(
-          {
-            error:
-              "space_id is required. Provide it in the request body or set DATABRICKS_SPACE_ID environment variable",
-          },
-          { status: 400 },
-        );
+      if (!body.space_id) {
+        return json({ error: "space_id field is required" }, { status: 400 });
       }
 
       try {
         const databricksResponse = await startGenieConversation(
-          spaceId,
+          body.space_id,
           body.content,
         );
 
@@ -97,21 +89,13 @@ export function handler(req: Request): Promise<Response> | Response {
         return json({ error: "message_id field is required" }, { status: 400 });
       }
 
-      const spaceId = body.space_id || Deno.env.get("DATABRICKS_SPACE_ID");
-
-      if (!spaceId) {
-        return json(
-          {
-            error:
-              "space_id is required. Provide it in the request body or set DATABRICKS_SPACE_ID environment variable",
-          },
-          { status: 400 },
-        );
+      if (!body.space_id) {
+        return json({ error: "space_id field is required" }, { status: 400 });
       }
 
       try {
         const databricksResponse = await getGenieMessage(
-          spaceId,
+          body.space_id,
           body.conversation_id,
           body.message_id,
         );
