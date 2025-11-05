@@ -3,17 +3,33 @@ A chat interface built on top of the Databricks Genie API
 
 ## Setup
 
-Set the following environment variables:
+Create a `.env` file in the project root:
 
-- `DATABRICKS_WORKSPACE_URL`: Your Databricks workspace URL (e.g., `https://your-workspace.cloud.databricks.com`)
-- `DATABRICKS_TOKEN`: Your Databricks personal access token or API token
-- `DATABRICKS_SPACE_ID`: (Optional) Your Genie space ID. Can also be provided in each request body.
+```env
+DATABRICKS_WORKSPACE_URL=https://your-workspace.cloud.databricks.com
+DATABRICKS_TOKEN=your-databricks-token
+DATABRICKS_SPACE_ID=your-space-id
+```
 
-## API Usage
+## Start the Server
+
+```bash
+deno run --allow-net --allow-env --allow-read main.ts
+```
+
+Or use the dev task:
+
+```bash
+deno task dev
+```
+
+The server will start on `http://localhost:8000`
+
+## API Endpoints
 
 ### Start a Conversation
 
-**Endpoint:** `POST /api/genie`
+**Endpoint:** `POST /api/genie/start-conversation`
 
 **Request Body:**
 ```json
@@ -23,19 +39,34 @@ Set the following environment variables:
 }
 ```
 
-**Response:**
+**Example:**
+```bash
+curl -X POST http://localhost:8000/api/genie/start-conversation \
+  -H "Content-Type: application/json" \
+  -d '{"content": "What are the biggest open opportunities?"}'
+```
+
+### Get Message
+
+**Endpoint:** `POST /api/genie/get-message`
+
+**Request Body:**
 ```json
 {
   "conversation_id": "conversation-uuid",
-  ...
+  "message_id": "message-uuid",
+  "space_id": "optional-space-id-if-not-set-in-env"
 }
 ```
 
 **Example:**
 ```bash
-curl -X POST http://localhost:8000/api/genie \
+curl -X POST http://localhost:8000/api/genie/get-message \
   -H "Content-Type: application/json" \
-  -d '{"content": "What are the biggest open opportunities?"}'
+  -d '{
+    "conversation_id": "e1ef34712a29169db030324fd0e1df5f",
+    "message_id": "e1ef34712a29169db030324fd0e1df5f"
+  }'
 ```
 
 ## References
