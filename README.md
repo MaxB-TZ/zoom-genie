@@ -2,7 +2,12 @@
 
 A lightweight REST API server that provides a clean interface to interact with Databricks Genie API. Built with Deno.
 
-## Setup
+## Project Setup
+
+Install Deno:
+```bash
+brew install deno
+```
 
 Create a `.env` file in the project root:
 
