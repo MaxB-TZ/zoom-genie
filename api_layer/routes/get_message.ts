@@ -1,28 +1,4 @@
-interface DatabricksGetMessageResponse {
-  message_id: string;
-  conversation_id: string;
-  space_id: string;
-  content: string;
-  status: string;
-  created_timestamp: number;
-  last_updated_timestamp: number;
-  user_id: number;
-  attachments?: Array<unknown>;
-  error?: {
-    error: string;
-    type: string;
-  };
-  feedback?: {
-    rating: string;
-  };
-  query_result?: {
-    statement_id: string;
-    statement_id_signature: string;
-    row_count: number;
-    is_truncated: boolean;
-  };
-  [key: string]: unknown;
-}
+import { DatabricksGetMessageResponse } from "../types.ts";
 
 export async function getGenieMessage(
   spaceId: string,
@@ -33,7 +9,9 @@ export async function getGenieMessage(
   const databricksToken = Deno.env.get("DATABRICKS_TOKEN");
 
   if (!databricksUrl) {
-    throw new Error("DATABRICKS_WORKSPACE_URL environment variable is required");
+    throw new Error(
+      "DATABRICKS_WORKSPACE_URL environment variable is required",
+    );
   }
 
   if (!databricksToken) {

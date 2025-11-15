@@ -1,11 +1,7 @@
-interface DatabricksStartConversationRequest {
-  content: string;
-}
-
-interface DatabricksStartConversationResponse {
-  conversation_id: string;
-  [key: string]: unknown;
-}
+import {
+  DatabricksStartConversationRequest,
+  DatabricksStartConversationResponse,
+} from "../types.ts";
 
 export async function startGenieConversation(
   spaceId: string,
@@ -15,7 +11,9 @@ export async function startGenieConversation(
   const databricksToken = Deno.env.get("DATABRICKS_TOKEN");
 
   if (!databricksUrl) {
-    throw new Error("DATABRICKS_WORKSPACE_URL environment variable is required");
+    throw new Error(
+      "DATABRICKS_WORKSPACE_URL environment variable is required",
+    );
   }
 
   if (!databricksToken) {
@@ -24,10 +22,12 @@ export async function startGenieConversation(
 
   // Remove trailing slash if present
   const baseUrl = databricksUrl.replace(/\/$/, "");
-  const apiUrl = `${baseUrl}/api/2.0/genie/spaces/${spaceId}/start-conversation`;
+  const apiUrl =
+    `${baseUrl}/api/2.0/genie/spaces/${spaceId}/start-conversation`;
 
   const requestBody: DatabricksStartConversationRequest = {
     content,
+    space_id: spaceId,
   };
 
   const response = await fetch(apiUrl, {

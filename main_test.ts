@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { handler } from "./api_layer/genie.ts";
+import { handler } from "./api_layer/genie_handler.ts";
 
 Deno.test("CORS preflight request", async () => {
   const request = new Request("http://localhost:8000/api/genie/start-conversation", {

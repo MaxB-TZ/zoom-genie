@@ -13,14 +13,16 @@ DATABRICKS_TOKEN=your-databricks-token
 
 ## Start the Server
 
-```bash
-deno run --allow-net --allow-env --allow-read main.ts
-```
-
-Or use the dev task:
+The dev task automatically loads your `.env` file:
 
 ```bash
 deno task dev
+```
+
+Or run manually with the `--env-file` flag:
+
+```bash
+deno run --allow-net --allow-env --allow-read --env-file=.env main.ts
 ```
 
 The server will start on `http://localhost:8000`
