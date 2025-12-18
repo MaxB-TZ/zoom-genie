@@ -1,6 +1,6 @@
-# zoom-genie
+# Zoom Genie
 
-A lightweight REST API server that provides a clean interface to interact with Databricks Genie API. Built with Deno.
+A Fresh web application for interacting with Databricks Genie API. Built with Deno, Fresh, Preact, and DaisyUI.
 
 ## Project Setup
 
@@ -16,137 +16,49 @@ DATABRICKS_WORKSPACE_URL=https://your-workspace.cloud.databricks.com
 DATABRICKS_TOKEN=your-databricks-token
 ```
 
-## Start the Server
+## Development
 
-The dev task automatically loads your `.env` file:
+Start the development server:
 
 ```bash
 deno task dev
 ```
 
-Or run manually with the `--env-file` flag:
+The app will be available at `http://localhost:8000`
+
+## Building for Production
+
+Build the application:
 
 ```bash
-deno run --allow-net --allow-env --allow-read --env-file=.env main.ts
+deno task build
 ```
 
-The server will start on `http://localhost:8000`
+Start the production server:
 
-## API Endpoints
-
-### Start a Conversation
-
-**Endpoint:** `POST /api/genie/start-conversation`
-
-**Request Body:**
-```json
-{
-  "content": "Your question or message here",
-  "space_id": "your-space-id"
-}
-```
-
-**Example:**
 ```bash
-curl -X POST http://localhost:8000/api/genie/start-conversation \
-  -H "Content-Type: application/json" \
-  -d '{"content": "What are the biggest open opportunities?", "space_id": "your-space-id"}'
+deno task start
 ```
 
-### Get Message
+## Usage
 
-**Endpoint:** `POST /api/genie/get-message`
+1. Enter your Databricks Space ID
+2. Enter your question or message
+3. Click "Send" to stream the response in real-time
 
-**Request Body:**
-```json
-{
-  "conversation_id": "conversation-uuid",
-  "message_id": "message-uuid",
-  "space_id": "your-space-id"
-}
-```
+The application uses Server-Sent Events (SSE) to stream responses from the Databricks Genie API, providing real-time updates as the conversation progresses.
 
-**Example:**
-```bash
-curl -X POST http://localhost:8000/api/genie/get-message \
-  -H "Content-Type: application/json" \
-  -d '{
-    "conversation_id": "e1ef34712a29169db030324fd0e1df5f",
-    "message_id": "e1ef34712a29169db030324fd0e1df5f",
-    "space_id": "your-space-id"
-  }'
-```
+## API Layer
 
-### Stream Conversation
-
-**Endpoint:** `POST /api/genie/stream-conversation`
-
-Streams real-time updates from a Genie conversation using Server-Sent Events (SSE). This endpoint starts a conversation and automatically polls for status updates, streaming events as they occur.
-
-**Request Body:**
-```json
-{
-  "content": "Your question or message here",
-  "space_id": "your-space-id",
-  "poll_interval_ms": 2000,
-  "max_polls": 300
-}
-```
-
-**Parameters:**
-- `content` (required): The question or message to send to Genie
-- `space_id` (required): Your Databricks space ID
-- `poll_interval_ms` (optional): Milliseconds between status polls. Defaults to `2000` (2 seconds)
-- `max_polls` (optional): Maximum number of polls before timeout. Defaults to `300`
-
-**Response Format:**
-The endpoint returns a Server-Sent Events (SSE) stream with the following event types:
-
-1. **`started`** - Emitted when the conversation is initiated:
-```json
-{
-  "type": "started",
-  "conversation_id": "conversation-uuid",
-  "message_id": "message-uuid"
-}
-```
-
-2. **`status`** - Emitted on each poll with current message status:
-```json
-{
-  "type": "status",
-  "status": "PROCESSING",
-  "message": { /* full message object */ },
-  "plain_text": ["text content"],
-  "markdown_text": ["markdown content"]
-}
-```
-
-3. **`error`** - Emitted if an error occurs:
-```json
-{
-  "type": "error",
-  "error": "Error message"
-}
-```
-
-The stream automatically closes when the message status reaches a terminal state (`COMPLETED`, `FAILED`, or `CANCELLED`).
-
-**Example:**
-```bash
-curl -X POST http://localhost:8000/api/genie/stream-conversation \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "What are the biggest open opportunities?",
-    "space_id": "your-space-id",
-    "poll_interval_ms": 2000,
-    "max_polls": 300
-  }'
-```
-
-**Note:** This endpoint uses Server-Sent Events. To consume the stream in JavaScript, use the `EventSource` API or handle the `text/event-stream` response directly.
+The `api_layer/` directory contains the core API logic for interacting with Databricks Genie:
+- `routes/start_conversation.ts` - Starts a new Genie conversation
+- `routes/get_message.ts` - Retrieves a message from a conversation
+- `routes/stream_conversation.ts` - Streams conversation updates via SSE
+- `types.ts` - TypeScript type definitions
 
 ## References
 
 - [Databricks Start Genie Conversation API Docs](https://docs.databricks.com/api/workspace/genie/startconversation)
 - [Databricks Get Conversation Message API Docs](https://docs.databricks.com/api/workspace/genie/getmessage)
+- [Fresh Framework](https://fresh.deno.dev/)
+- [DaisyUI Components](https://daisyui.com/)
